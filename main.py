@@ -12,8 +12,14 @@ SQUARES_X = 24
 SQUARES_Y = 17
 
 BACKGROUND = pygame.image.load('Assets/Background.png')
+
 BODY = pygame.image.load('Assets/PythonBody.png')
-HEAD = pygame.image.load('Assets/PythonHead.png')
+
+HEAD_UP = pygame.image.load('Assets/PythonHeadUp.png')
+HEAD_DOWN = pygame.image.load('Assets/PythonHeadDown.png')
+HEAD_RIGHT = pygame.image.load('Assets/PythonHeadRight.png')
+HEAD_LEFT = pygame.image.load('Assets/PythonHeadLeft.png')
+
 cplus = pygame.image.load('Assets/cplusplus.png')
 csharp = pygame.image.load('Assets/csharp.png')
 js = pygame.image.load('Assets/js.png')
@@ -54,6 +60,8 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Python Snake')
 
+    head_position = HEAD_RIGHT
+
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
 
     font2 = pygame.font.Font(None, 72)
@@ -91,18 +99,22 @@ def main():
                     if flag and not pos[1]:
                         pos = (0, -1)
                         flag = False
+                        head_position = HEAD_UP
                 elif event.key in (pygame.K_s, pygame.K_DOWN):
                     if flag and not pos[1]:
                         pos = (0, 1)
                         flag = False
+                        head_position = HEAD_DOWN
                 elif event.key in (pygame.K_a, pygame.K_LEFT):
                     if flag and not pos[0]:
                         pos = (-1, 0)
                         flag = False
+                        head_position = HEAD_LEFT
                 elif event.key in (pygame.K_d, pygame.K_RIGHT):
                     if flag and not pos[0]:
                         pos = (1, 0)
                         flag = False
+                        head_position = HEAD_RIGHT
         screen.blit(BACKGROUND, (0, 0))
 
         if running:
@@ -127,10 +139,12 @@ def main():
             screen.blit(rand_food,
                         (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         for s in snake:
-            proper_size_body = pygame.transform.scale(BODY, (40, 40))
-            screen.blit(proper_size_body,
+            screen.blit(BODY,
                         (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
                          SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+        screen.blit(head_position,
+                    (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
+                        SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         if not running:
             if start:
                 print_text(screen, font2, (WIDTH - fwidth) // 2,
