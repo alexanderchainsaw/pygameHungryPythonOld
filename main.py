@@ -54,6 +54,8 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Python Snake')
 
+    flag = True  # preventing a bug ( simultaneous key presses causing game over )
+
     font2 = pygame.font.Font(None, 72)
     fwidth, fheight = font2.size('GAME OVER')
     score = 0
@@ -74,6 +76,7 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
                 if event.key == pygame.K_RETURN and not running:
+                    flag = True
                     start = True
                     running = True
                     snake = init_snake()
@@ -85,23 +88,28 @@ def main():
                     if running:
                         pause = not pause
                 elif event.key in (pygame.K_w, pygame.K_UP):
-                    if not pos[1]:
+                    if flag and not pos[1]:
                         pos = (0, -1)
+                        flag = False
                 elif event.key in (pygame.K_s, pygame.K_DOWN):
-                    if not pos[1]:
+                    if flag and not pos[1]:
                         pos = (0, 1)
+                        flag = False
                 elif event.key in (pygame.K_a, pygame.K_LEFT):
-                    if not pos[0]:
+                    if flag and not pos[0]:
                         pos = (-1, 0)
+                        flag = False
                 elif event.key in (pygame.K_d, pygame.K_RIGHT):
-                    if not pos[0]:
+                    if flag and not pos[0]:
                         pos = (1, 0)
+                        flag = False
         screen.blit(BACKGROUND, (0, 0))
 
         if running:
             cur_time = time.time()
             if cur_time - last_move_time > speed:
                 if not pause:
+                    flag = True
                     last_move_time = cur_time
                     next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
                     if next_s == food:
