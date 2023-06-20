@@ -7,30 +7,25 @@ from collections import deque
 WIDTH = 1000
 HEIGHT = 720
 SQUARE_SIZE = 40
-
 SQUARES_X = 24
 SQUARES_Y = 17
 
 BACKGROUND = pygame.image.load('Assets/Background.png')
-
 BODY = pygame.image.load('Assets/PythonBody.png')
-
 HEAD_UP = pygame.image.load('Assets/PythonHeadUp.png')
 HEAD_DOWN = pygame.image.load('Assets/PythonHeadDown.png')
 HEAD_RIGHT = pygame.image.load('Assets/PythonHeadRight.png')
 HEAD_LEFT = pygame.image.load('Assets/PythonHeadLeft.png')
-
-cplus = pygame.image.load('Assets/cplusplus.png')
-csharp = pygame.image.load('Assets/csharp.png')
-js = pygame.image.load('Assets/js.png')
-java = pygame.image.load('Assets/java.png')
-ruby = pygame.image.load('Assets/ruby.png')
-golang = pygame.image.load('Assets/golang.png')
-php = pygame.image.load('Assets/php.png')
-rust = pygame.image.load('Assets/rust.png')
-swift = pygame.image.load('Assets/swift.png')
-
-FOOD_FOR_PYTHON = [cplus, csharp, js, java, rust, ruby, golang, php, swift]
+CPLUS = pygame.image.load('Assets/cplusplus.png')
+CSHARP = pygame.image.load('Assets/csharp.png')
+JS = pygame.image.load('Assets/js.png')
+JAVA = pygame.image.load('Assets/java.png')
+RUBY = pygame.image.load('Assets/ruby.png')
+GOLANG = pygame.image.load('Assets/golang.png')
+PHP = pygame.image.load('Assets/php.png')
+RUST = pygame.image.load('Assets/rust.png')
+SWIFT = pygame.image.load('Assets/swift.png')
+FOOD_FOR_PYTHON = [CPLUS, CSHARP, JS, JAVA, RUST, RUBY, GOLANG, PHP, SWIFT]
 
 
 def print_text(screen, font, x, y, text, fcolor=(255, 255, 255)):
@@ -73,7 +68,7 @@ def main():
     pos = (1, 0)
     running = False
     start = False
-    speed = 0.1
+    speed = 0.15
     last_move_time = None
     pause = False
     while True:
@@ -124,7 +119,7 @@ def main():
                     flag = True
                     last_move_time = cur_time
                     next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
-                    if next_s == food:
+                    if next_s == food:  # brute force = 'if food in snake'
                         snake.appendleft(next_s)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -133,7 +128,37 @@ def main():
                                 and next_s not in snake:
                             snake.appendleft(next_s)
                             snake.pop()
-                        else:
+                        # early ver of passthrough (not working properly)
+                        elif next_s[0] > SQUARES_X and next_s not in snake:
+                            snake.appendleft(next_s := (snake[0][0] + pos[0] - SQUARES_X - 1, snake[0][1] + pos[1]))
+                            snake.pop()
+                            if next_s == food:  # brute force = 'if food in snake'
+                                snake.appendleft(next_s)
+                                food = create_food(snake)
+                                rand_food = random.choice(FOOD_FOR_PYTHON)
+                        elif 0 > next_s[0] < SQUARES_X and next_s not in snake:
+                            snake.appendleft(next_s := (snake[0][0] + pos[0] + SQUARES_X + 1, snake[0][1] + pos[1]))
+                            snake.pop()
+                            if next_s == food:  # brute force = 'if food in snake'
+                                snake.appendleft(next_s)
+                                food = create_food(snake)
+                                rand_food = random.choice(FOOD_FOR_PYTHON)
+                        elif next_s[1] > SQUARES_Y and next_s not in snake:
+                            snake.appendleft(next_s := (snake[0][0] + pos[0], snake[0][1] + pos[1] - SQUARES_Y - 1))
+                            snake.pop()
+                            if next_s == food:  # brute force = 'if food in snake'
+                                snake.appendleft(next_s)
+                                food = create_food(snake)
+                                rand_food = random.choice(FOOD_FOR_PYTHON)
+                        elif 0 > next_s[1] < SQUARES_Y and next_s not in snake:
+                            snake.appendleft(next_s := (snake[0][0] + pos[0], snake[0][1] + pos[1] + SQUARES_Y + 1))
+                            snake.pop()
+                            if next_s == food:  # brute force = 'if food in snake'
+                                snake.appendleft(next_s)
+                                food = create_food(snake)
+                                rand_food = random.choice(FOOD_FOR_PYTHON)
+                        # early ver of passthrough (not working properly)
+                        elif next_s in snake:
                             running = False
         if running:
             screen.blit(rand_food,
