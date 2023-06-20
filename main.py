@@ -6,11 +6,10 @@ from collections import deque
 
 WIDTH = 1000
 HEIGHT = 720
-PIXEL_SIZE = 40
-LINE_WIDTH = 1
+SQUARE_SIZE = 40
 
-SCOPE_X = (0, 24)
-SCOPE_Y = (0, 17)
+SQUARES_X = 24
+SQUARES_Y = 17
 
 BACKGROUND = pygame.image.load('Assets/Background.png')
 BODY = pygame.image.load('Assets/PythonBody.png')
@@ -35,18 +34,18 @@ def print_text(screen, font, x, y, text, fcolor=(255, 255, 255)):
 
 def init_snake():
     snake = deque()
-    snake.append((2, SCOPE_Y[0]))
-    snake.append((1, SCOPE_Y[0]))
-    snake.append((0, SCOPE_Y[0]))
+    snake.append((2, 0))
+    snake.append((1, 0))
+    snake.append((0, 0))
     return snake
 
 
 def create_food(snake):
-    food_x = random.randint(SCOPE_X[0], SCOPE_X[1])
-    food_y = random.randint(SCOPE_Y[0], SCOPE_Y[1])
+    food_x = random.randint(0, SQUARES_X)
+    food_y = random.randint(0, SQUARES_Y)
     while (food_x, food_y) in snake:
-        food_x = random.randint(SCOPE_X[0], SCOPE_X[1])
-        food_y = random.randint(SCOPE_Y[0], SCOPE_Y[1])
+        food_x = random.randint(0, SQUARES_X)
+        food_y = random.randint(0, SQUARES_Y)
     return food_x, food_y
 
 
@@ -57,17 +56,14 @@ def main():
 
     font2 = pygame.font.Font(None, 72)
     fwidth, fheight = font2.size('GAME OVER')
-    b = True
     score = 0
     snake = init_snake()
     food = create_food(snake)
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
-
     running = False
     start = False
-    orispeed = 0.2
-    speed = orispeed
+    speed = 0.1
     last_move_time = None
     pause = False
     while True:
@@ -78,10 +74,8 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
                 if event.key == pygame.K_RETURN and not running:
-
                     start = True
                     running = True
-                    b = True
                     snake = init_snake()
                     food = create_food(snake)
                     pos = (1, 0)
@@ -91,37 +85,31 @@ def main():
                     if running:
                         pause = not pause
                 elif event.key in (pygame.K_w, pygame.K_UP):
-                    if b and not pos[1]:
+                    if not pos[1]:
                         pos = (0, -1)
-                        b = False
                 elif event.key in (pygame.K_s, pygame.K_DOWN):
-                    if b and not pos[1]:
+                    if not pos[1]:
                         pos = (0, 1)
-                        b = False
                 elif event.key in (pygame.K_a, pygame.K_LEFT):
-                    if b and not pos[0]:
+                    if not pos[0]:
                         pos = (-1, 0)
-                        b = False
                 elif event.key in (pygame.K_d, pygame.K_RIGHT):
-                    if b and not pos[0]:
+                    if not pos[0]:
                         pos = (1, 0)
-                        b = False
         screen.blit(BACKGROUND, (0, 0))
 
         if running:
             cur_time = time.time()
             if cur_time - last_move_time > speed:
                 if not pause:
-                    b = True
                     last_move_time = cur_time
                     next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
                     if next_s == food:
                         snake.appendleft(next_s)
-                        speed = orispeed - 0.03 * (score // 100)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
                     else:
-                        if SCOPE_X[0] <= next_s[0] <= SCOPE_X[1] and SCOPE_Y[0] <= next_s[1] <= SCOPE_Y[1] \
+                        if 0 <= next_s[0] <= SQUARES_X and 0 <= next_s[1] <= SQUARES_Y \
                                 and next_s not in snake:
                             snake.appendleft(next_s)
                             snake.pop()
@@ -129,12 +117,12 @@ def main():
                             running = False
         if running:
             screen.blit(rand_food,
-                        (food[0] * PIXEL_SIZE, food[1] * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE))
+                        (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         for s in snake:
             proper_size_body = pygame.transform.scale(BODY, (40, 40))
             screen.blit(proper_size_body,
-                        (s[0] * PIXEL_SIZE + LINE_WIDTH, s[1] * PIXEL_SIZE + LINE_WIDTH,
-                         PIXEL_SIZE - LINE_WIDTH * 2, PIXEL_SIZE - LINE_WIDTH * 2))
+                        (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
+                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         if not running:
             if start:
                 print_text(screen, font2, (WIDTH - fwidth) // 2,
