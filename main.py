@@ -119,7 +119,7 @@ def main():
                     flag = True
                     last_move_time = cur_time
                     next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
-                    if next_s == food:  # brute force = 'if food in snake'
+                    if next_s == food:
                         snake.appendleft(next_s)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -128,36 +128,42 @@ def main():
                                 and next_s not in snake:
                             snake.appendleft(next_s)
                             snake.pop()
-                        # early ver of passthrough (not working properly)
                         elif next_s[0] > SQUARES_X and next_s not in snake:
                             snake.appendleft(next_s := (snake[0][0] + pos[0] - SQUARES_X - 1, snake[0][1] + pos[1]))
                             snake.pop()
-                            if next_s == food:  # brute force = 'if food in snake'
+                            if next_s == food:
                                 snake.appendleft(next_s)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
+                            if len(snake) != len(set(snake)):
+                                running = False
                         elif 0 > next_s[0] < SQUARES_X and next_s not in snake:
                             snake.appendleft(next_s := (snake[0][0] + pos[0] + SQUARES_X + 1, snake[0][1] + pos[1]))
                             snake.pop()
-                            if next_s == food:  # brute force = 'if food in snake'
+                            if next_s == food:
                                 snake.appendleft(next_s)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
+                            if len(snake) != len(set(snake)):
+                                running = False
                         elif next_s[1] > SQUARES_Y and next_s not in snake:
                             snake.appendleft(next_s := (snake[0][0] + pos[0], snake[0][1] + pos[1] - SQUARES_Y - 1))
                             snake.pop()
-                            if next_s == food:  # brute force = 'if food in snake'
+                            if next_s == food:
                                 snake.appendleft(next_s)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
+                            if len(snake) != len(set(snake)):
+                                running = False
                         elif 0 > next_s[1] < SQUARES_Y and next_s not in snake:
                             snake.appendleft(next_s := (snake[0][0] + pos[0], snake[0][1] + pos[1] + SQUARES_Y + 1))
                             snake.pop()
-                            if next_s == food:  # brute force = 'if food in snake'
+                            if next_s == food:
                                 snake.appendleft(next_s)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
-                        # early ver of passthrough (not working properly)
+                            if len(snake) != len(set(snake)):
+                                running = False
                         elif next_s in snake:
                             running = False
         if running:
