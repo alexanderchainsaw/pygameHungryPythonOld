@@ -4,28 +4,14 @@ import time
 import pygame
 from collections import deque
 
+import assets
+
 WIDTH = 1000
 HEIGHT = 720
 SQUARE_SIZE = 40
 SQUARES_X = 24
 SQUARES_Y = 17
-
-BACKGROUND = pygame.image.load('Assets/Background.png')
-BODY = pygame.image.load('Assets/PythonBody.png')
-HEAD_UP = pygame.image.load('Assets/PythonHeadUp.png')
-HEAD_DOWN = pygame.image.load('Assets/PythonHeadDown.png')
-HEAD_RIGHT = pygame.image.load('Assets/PythonHeadRight.png')
-HEAD_LEFT = pygame.image.load('Assets/PythonHeadLeft.png')
-CPLUS = pygame.image.load('Assets/cplusplus.png')
-CSHARP = pygame.image.load('Assets/csharp.png')
-JS = pygame.image.load('Assets/js.png')
-JAVA = pygame.image.load('Assets/java.png')
-RUBY = pygame.image.load('Assets/ruby.png')
-GOLANG = pygame.image.load('Assets/golang.png')
-PHP = pygame.image.load('Assets/php.png')
-RUST = pygame.image.load('Assets/rust.png')
-SWIFT = pygame.image.load('Assets/swift.png')
-FOOD_FOR_PYTHON = [CPLUS, CSHARP, JS, JAVA, RUST, RUBY, GOLANG, PHP, SWIFT]
+FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 
 
 def print_text(screen, font, x, y, text, fcolor=(255, 255, 255)):
@@ -55,7 +41,7 @@ def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Python Snake')
 
-    head_position = HEAD_RIGHT
+    head_position = assets.HEAD_RIGHT
 
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
 
@@ -94,23 +80,23 @@ def main():
                     if flag and not pos[1]:
                         pos = (0, -1)
                         flag = False
-                        head_position = HEAD_UP
+                        head_position = assets.HEAD_UP
                 elif event.key in (pygame.K_s, pygame.K_DOWN):
                     if flag and not pos[1]:
                         pos = (0, 1)
                         flag = False
-                        head_position = HEAD_DOWN
+                        head_position = assets.HEAD_DOWN
                 elif event.key in (pygame.K_a, pygame.K_LEFT):
                     if flag and not pos[0]:
                         pos = (-1, 0)
                         flag = False
-                        head_position = HEAD_LEFT
+                        head_position = assets.HEAD_LEFT
                 elif event.key in (pygame.K_d, pygame.K_RIGHT):
                     if flag and not pos[0]:
                         pos = (1, 0)
                         flag = False
-                        head_position = HEAD_RIGHT
-        screen.blit(BACKGROUND, (0, 0))
+                        head_position = assets.HEAD_RIGHT
+        screen.blit(assets.BACKGROUND, (0, 0))
 
         if running:
             cur_time = time.time()
@@ -162,7 +148,7 @@ def main():
             screen.blit(rand_food,
                         (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         for s in snake:
-            screen.blit(BODY,
+            screen.blit(assets.BODY,
                         (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
                          SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         screen.blit(head_position,
