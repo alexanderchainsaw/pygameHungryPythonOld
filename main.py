@@ -115,29 +115,41 @@ def main():
                             snake.appendleft(next_s)
                             snake.pop()
                         elif next_s[0] > SQUARES_X and next_s not in snake:
-                            snake.appendleft(foo := (snake[0][0] + pos[0] - SQUARES_X - 1, snake[0][1] + pos[1]))
-                            snake.pop()
+                            if (foo := (snake[0][0] + pos[0] - SQUARES_X - 1, snake[0][1] + pos[1])) in snake:
+                                running = False
+                            else:
+                                snake.appendleft(foo)
+                                snake.pop()
                             if foo == food:
                                 snake.appendleft(foo)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
                         elif 0 > next_s[0] < SQUARES_X and next_s not in snake:
-                            snake.appendleft(foo := (snake[0][0] + pos[0] + SQUARES_X + 1, snake[0][1] + pos[1]))
-                            snake.pop()
+                            if (foo := (snake[0][0] + pos[0] + SQUARES_X + 1, snake[0][1] + pos[1])) in snake:
+                                running = False
+                            else:
+                                snake.appendleft(foo)
+                                snake.pop()
                             if foo == food:
                                 snake.appendleft(foo)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
                         elif next_s[1] > SQUARES_Y and next_s not in snake:
-                            snake.appendleft(foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] - SQUARES_Y - 1))
-                            snake.pop()
+                            if (foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] - SQUARES_Y - 1)) in snake:
+                                running = False
+                            else:
+                                snake.appendleft(foo)
+                                snake.pop()
                             if foo == food:
                                 snake.appendleft(foo)
                                 food = create_food(snake)
                                 rand_food = random.choice(FOOD_FOR_PYTHON)
                         elif 0 > next_s[1] < SQUARES_Y and next_s not in snake:
-                            snake.appendleft(foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] + SQUARES_Y + 1))
-                            snake.pop()
+                            if (foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] + SQUARES_Y + 1)) in snake:
+                                running = False
+                            else:
+                                snake.appendleft(foo)
+                                snake.pop()
                             if foo == food:
                                 snake.appendleft(foo)
                                 food = create_food(snake)
