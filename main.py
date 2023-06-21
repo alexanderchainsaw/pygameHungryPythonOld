@@ -109,6 +109,7 @@ def main():
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
                     else:
+                        # BUG - Game not over when passing through wall and there is snake on the other side
                         if 0 <= next_s[0] <= SQUARES_X and 0 <= next_s[1] <= SQUARES_Y \
                                 and next_s not in snake:
                             snake.appendleft(next_s)
