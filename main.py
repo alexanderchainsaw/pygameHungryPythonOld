@@ -14,7 +14,7 @@ SQUARES_Y = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 
 
-def print_text(screen, font, x, y, text, fcolor=(255, 255, 255)):
+def print_text(screen, font, x, y, text, fcolor=(100, 100, 100)):
     imgtext = font.render(text, True, fcolor)
     screen.blit(imgtext, (x, y))
 
@@ -45,9 +45,8 @@ def main():
 
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
 
-    font2 = pygame.font.Font(None, 72)
-    fwidth, fheight = font2.size('GAME OVER')
-    score = 0
+    main_font = pygame.font.Font('Assets/AtariClassic-gry3.ttf', 24)
+    fwidth, fheight = main_font.size('GAME OVER')
     snake = init_snake()
     food = create_food(snake)
     rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -71,8 +70,8 @@ def main():
                     snake = init_snake()
                     food = create_food(snake)
                     pos = (1, 0)
-                    score += 1
                     last_move_time = time.time()
+                    head_position = assets.HEAD_RIGHT
                 elif event.key == pygame.K_SPACE:
                     if running:
                         pause = not pause
@@ -156,11 +155,11 @@ def main():
                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         if not running:
             if start:
-                print_text(screen, font2, (WIDTH - fwidth) // 2,
-                           (HEIGHT - fheight) // 2, 'GAME OVER', (100, 100, 100))
+                print_text(screen, main_font, (WIDTH - fwidth) // 2,
+                           (HEIGHT - fheight) // 2, 'GAME OVER')
         if not running:
-            print_text(screen, font2, (WIDTH - fwidth) // 2 - 85,
-                       (HEIGHT - fheight) // 2 + 150, "Press 'Enter' to start", (100, 100, 100))
+            print_text(screen, main_font, (WIDTH - fwidth) // 2 - 150,
+                       (HEIGHT - fheight) // 2 + 150, "Press 'Enter' to start")
         pygame.display.update()
 
 
