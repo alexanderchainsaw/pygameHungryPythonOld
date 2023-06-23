@@ -16,7 +16,7 @@ game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
 
 
-def print_text(screen, font, x, y, text, font_color=(80, 80, 80)):
+def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
     imgtext = font.render(text, True, font_color)
     screen.blit(imgtext, (x, y))
 
@@ -148,18 +148,26 @@ def main():
                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         screen.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
                     SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+        # painting obstacles
+        # pygame.draw.rect(screen, (0, 0, 0), (SQUARE_SIZE * 4, 0, SQUARE_SIZE*17, SQUARE_SIZE))
+        # pygame.draw.rect(screen, (0, 0, 0), (SQUARE_SIZE * 4, SQUARE_SIZE*17, SQUARE_SIZE*17, SQUARE_SIZE))
+        # pygame.draw.rect(screen, (0, 0, 0), (0, SQUARE_SIZE*4, SQUARE_SIZE, SQUARE_SIZE*10))
+        # pygame.draw.rect(screen, (0, 0, 0), (WIDTH-SQUARE_SIZE, SQUARE_SIZE*4, SQUARE_SIZE, SQUARE_SIZE*10))
+
         if running:
             print_text(screen, main_font, 0, 0, f'SCORE : {score}')
+            print_text(screen, main_font, 0, 20, f'LVL : ')
         if not running:
             if start:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'GAME OVER')
                 print_text(screen, main_font, WIDTH // 2 - 150,
                            HEIGHT // 2 + 75, f'SCORE : {score}')
+                print_text(screen, main_font, WIDTH // 2 - 100,
+                           HEIGHT // 2 + 110, f'LVL : ')
         if not running:
             print_text(screen, main_font, WIDTH // 2 - 250,
                        HEIGHT // 2 + 150, "Press 'Enter' to start")
-
         pygame.display.update()
         game_time.tick(speed)
 
