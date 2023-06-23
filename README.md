@@ -1,6 +1,9 @@
 # Hungry Python  
 
-https://github.com/alexanderchainsaw/pygameHungryPython/assets/126553365/94d06a76-112e-4a01-bfe2-d17562031701
+
+https://github.com/alexanderchainsaw/pygameHungryPython/assets/126553365/66410268-dec9-482c-b8f6-b511f11cb9a9
+
+
 
 ### Classic snake with Python as the snake and other langs as food  
 
