@@ -9,22 +9,23 @@ import assets
 
 WIDTH, HEIGHT = 1000, 720
 SQUARE_SIZE = 40
-SQUARES_X, SQUARES_Y = 24, 17
+SQUARES_X = (WIDTH//SQUARE_SIZE) - 1  # = 24
+SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
 
 
-def print_text(screen, font, x, y, text, font_color=(100, 100, 100)):
+def print_text(screen, font, x, y, text, font_color=(80, 80, 80)):
     imgtext = font.render(text, True, font_color)
     screen.blit(imgtext, (x, y))
 
 
 def init_snake():
     snake = deque()
-    snake.append((2, 0))
-    snake.append((1, 0))
-    snake.append((0, 0))
+    snake.append((7, 8))
+    snake.append((6, 8))
+    snake.append((5, 8))
     return snake
 
 
@@ -48,6 +49,7 @@ def main():
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
     running, start = False, False
+    score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
     while True:
         screen.blit(assets.BACKGROUND, (0, 0))
@@ -87,6 +89,7 @@ def main():
             flag = True
             next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
             if next_s == food:
+                score += 10
                 snake.appendleft(next_s)
                 food = create_food(snake)
                 rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -100,6 +103,7 @@ def main():
                     else:
                         snake.appendleft(foo), snake.pop()
                     if foo == food:
+                        score += 10
                         snake.appendleft(foo)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -109,6 +113,7 @@ def main():
                     else:
                         snake.appendleft(foo), snake.pop()
                     if foo == food:
+                        score += 10
                         snake.appendleft(foo)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -118,6 +123,7 @@ def main():
                     else:
                         snake.appendleft(foo), snake.pop()
                     if foo == food:
+                        score += 10
                         snake.appendleft(foo)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -127,6 +133,7 @@ def main():
                     else:
                         snake.appendleft(foo), snake.pop()
                     if foo == food:
+                        score += 10
                         snake.appendleft(foo)
                         food = create_food(snake)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
@@ -140,13 +147,18 @@ def main():
                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         screen.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
                     SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+        if running:
+            print_text(screen, main_font, 0, 0, f'SCORE : {score}')
         if not running:
             if start:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'GAME OVER')
+                print_text(screen, main_font, WIDTH // 2 - 150,
+                           HEIGHT // 2 + 75, f'SCORE : {score}')
         if not running:
             print_text(screen, main_font, WIDTH // 2 - 250,
                        HEIGHT // 2 + 150, "Press 'Enter' to start")
+
         pygame.display.update()
         game_time.tick(speed)
 
