@@ -4,6 +4,10 @@ https://github.com/alexanderchainsaw/pygameHungryPython/assets/126553365/94d06a7
 
 ### Classic snake with Python as the snake and other langs as food  
 
+
+      requirements: pygame==2.4.0
 ___
 *created by using https://github.com/guliang21 's https://github.com/guliang21/pygame/tree/master/GluttonousSnake as a starting point*
+
+
 
