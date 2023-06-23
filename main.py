@@ -65,6 +65,7 @@ def main():
                     food = create_food(snake)
                     pos = (1, 0)
                     head_position = assets.HEAD_RIGHT
+                    score = 0
                 elif event.key in (pygame.K_w, pygame.K_UP):
                     if flag and not pos[1]:
                         pos = (0, -1)
