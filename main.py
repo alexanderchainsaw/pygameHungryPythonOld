@@ -15,7 +15,7 @@ SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
-LEVELS = (levels.zero, levels.one, levels.two)
+LEVELS = (levels.zero, levels.one, levels.two, levels.three)
 
 
 def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
@@ -25,9 +25,9 @@ def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
 
 def init_snake():
     snake = deque()
-    snake.append((7, 8))
-    snake.append((6, 8))
-    snake.append((5, 8))
+    snake.append((3, 6))
+    snake.append((2, 6))
+    snake.append((1, 6))
     return snake
 
 
