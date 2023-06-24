@@ -15,7 +15,7 @@ SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
-LEVELS = (levels.zero, levels.one)
+LEVELS = (levels.zero, levels.one, levels.two)
 
 
 def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
@@ -155,7 +155,7 @@ def main():
                     running = False
                     lost = True
         if score == 100:
-            lvl_index = 1
+            lvl_index += 1
             running = False
             lost = False
             score = 0
@@ -167,10 +167,10 @@ def main():
                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         screen.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
                     SQUARE_SIZE * 2, SQUARE_SIZE * 2))
-        if lvl_index == 1:
-            for obstacle in levels.one:
-                pygame.draw.rect(screen, (100, 100, 100),
-                                 (obstacle[0] * SQUARE_SIZE, obstacle[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+
+        for obstacle in obstacles:
+            pygame.draw.rect(screen, (100, 100, 100),
+                             (obstacle[0] * SQUARE_SIZE, obstacle[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
         if running:
             print_text(screen, main_font, 0, 0, f'SCORE : {score}')
@@ -184,8 +184,12 @@ def main():
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2 + 110, f'LVL : {lvl_index}')
         if not running:
+            if lvl_index < 1:
+                phrase = 'start'
+            else:
+                phrase = 'continue'
             print_text(screen, main_font, WIDTH // 2 - 250,
-                       HEIGHT // 2 + 150, f"Press 'Enter' to {('start', 'continue')[lvl_index]}")
+                       HEIGHT // 2 + 150, f"Press 'Enter' to {phrase}")
         pygame.display.update()
         game_time.tick(speed)
 
