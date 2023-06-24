@@ -6,6 +6,7 @@ import pygame
 from collections import deque
 
 import assets
+import levels
 
 WIDTH, HEIGHT = 1000, 720
 SQUARE_SIZE = 40
@@ -14,6 +15,7 @@ SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
+LEVELS = (levels.zero, levels.one)
 
 
 def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
@@ -29,10 +31,10 @@ def init_snake():
     return snake
 
 
-def create_food(snake):
+def create_food(snake, obstacle):
     food_x = random.randint(0, SQUARES_X)
     food_y = random.randint(0, SQUARES_Y)
-    while (food_x, food_y) in snake:
+    while (food_x, food_y) in snake or (food_x, food_y) in obstacle:
         food_x = random.randint(0, SQUARES_X)
         food_y = random.randint(0, SQUARES_Y)
     return food_x, food_y
@@ -45,13 +47,16 @@ def main():
     head_position = assets.HEAD_RIGHT
     main_font = pygame.font.Font('Assets/AtariClassic-gry3.ttf', 24)
     snake = init_snake()
-    food = create_food(snake)
+    lvl_index = 0
+    obstacles = LEVELS[lvl_index]
+    food = create_food(snake, obstacles)
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
-    running, start = False, False
+    running, start, lost = False, False, True
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
     while True:
+        obstacles = LEVELS[lvl_index]
         screen.blit(assets.BACKGROUND, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -60,12 +65,20 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
                 if event.key == pygame.K_RETURN and not running:
-                    flag, start, running = True, True, True
-                    snake = init_snake()
-                    food = create_food(snake)
-                    pos = (1, 0)
-                    head_position = assets.HEAD_RIGHT
-                    score = 0
+                    if lost:
+                        flag, start, running = True, True, True
+                        snake = init_snake()
+                        food = create_food(snake, obstacles)
+                        pos = (1, 0)
+                        head_position = assets.HEAD_RIGHT
+                        score = 0
+                        lvl_index = 0
+                    else:
+                        flag, start, running = True, True, True
+                        snake = init_snake()
+                        food = create_food(snake, obstacles)
+                        pos = (1, 0)
+                        head_position = assets.HEAD_RIGHT
                 elif event.key in (pygame.K_w, pygame.K_UP):
                     if flag and not pos[1]:
                         pos = (0, -1)
@@ -92,13 +105,13 @@ def main():
             if next_s == food:
                 score += 10
                 snake.appendleft(next_s)
-                food = create_food(snake)
+                food = create_food(snake, obstacles)
                 rand_food = random.choice(FOOD_FOR_PYTHON)
             else:
                 if 0 <= next_s[0] <= SQUARES_X and 0 <= next_s[1] <= SQUARES_Y \
-                        and next_s not in snake:
+                        and next_s not in snake and next_s not in obstacles:
                     snake.appendleft(next_s), snake.pop()
-                elif next_s[0] > SQUARES_X and next_s not in snake:
+                elif next_s[0] > SQUARES_X and next_s not in snake and next_s not in obstacles:
                     if (foo := (snake[0][0] + pos[0] - SQUARES_X - 1, snake[0][1] + pos[1])) in snake:
                         running = False
                     else:
@@ -106,9 +119,9 @@ def main():
                     if foo == food:
                         score += 10
                         snake.appendleft(foo)
-                        food = create_food(snake)
+                        food = create_food(snake, obstacles)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
-                elif 0 > next_s[0] < SQUARES_X and next_s not in snake:
+                elif 0 > next_s[0] < SQUARES_X and next_s not in snake and next_s not in obstacles:
                     if (foo := (snake[0][0] + pos[0] + SQUARES_X + 1, snake[0][1] + pos[1])) in snake:
                         running = False
                     else:
@@ -116,9 +129,9 @@ def main():
                     if foo == food:
                         score += 10
                         snake.appendleft(foo)
-                        food = create_food(snake)
+                        food = create_food(snake, obstacles)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
-                elif next_s[1] > SQUARES_Y and next_s not in snake:
+                elif next_s[1] > SQUARES_Y and next_s not in snake and next_s not in obstacles:
                     if (foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] - SQUARES_Y - 1)) in snake:
                         running = False
                     else:
@@ -126,9 +139,9 @@ def main():
                     if foo == food:
                         score += 10
                         snake.appendleft(foo)
-                        food = create_food(snake)
+                        food = create_food(snake, obstacles)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
-                elif 0 > next_s[1] < SQUARES_Y and next_s not in snake:
+                elif 0 > next_s[1] < SQUARES_Y and next_s not in snake and next_s not in obstacles:
                     if (foo := (snake[0][0] + pos[0], snake[0][1] + pos[1] + SQUARES_Y + 1)) in snake:
                         running = False
                     else:
@@ -136,10 +149,16 @@ def main():
                     if foo == food:
                         score += 10
                         snake.appendleft(foo)
-                        food = create_food(snake)
+                        food = create_food(snake, obstacles)
                         rand_food = random.choice(FOOD_FOR_PYTHON)
-                elif next_s in snake:
+                elif next_s in snake or next_s in obstacles:
                     running = False
+                    lost = True
+        if score == 100:
+            lvl_index = 1
+            running = False
+            lost = False
+            score = 0
         if running:
             screen.blit(rand_food,
                         (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
@@ -148,26 +167,25 @@ def main():
                         SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         screen.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
                     SQUARE_SIZE * 2, SQUARE_SIZE * 2))
-        # painting obstacles
-        # pygame.draw.rect(screen, (0, 0, 0), (SQUARE_SIZE * 4, 0, SQUARE_SIZE*17, SQUARE_SIZE))
-        # pygame.draw.rect(screen, (0, 0, 0), (SQUARE_SIZE * 4, SQUARE_SIZE*17, SQUARE_SIZE*17, SQUARE_SIZE))
-        # pygame.draw.rect(screen, (0, 0, 0), (0, SQUARE_SIZE*4, SQUARE_SIZE, SQUARE_SIZE*10))
-        # pygame.draw.rect(screen, (0, 0, 0), (WIDTH-SQUARE_SIZE, SQUARE_SIZE*4, SQUARE_SIZE, SQUARE_SIZE*10))
+        if lvl_index == 1:
+            for obstacle in levels.one:
+                pygame.draw.rect(screen, (100, 100, 100),
+                                 (obstacle[0] * SQUARE_SIZE, obstacle[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
         if running:
             print_text(screen, main_font, 0, 0, f'SCORE : {score}')
-            print_text(screen, main_font, 0, 20, f'LVL : ')
+            print_text(screen, main_font, 0, 20, f'LVL :{lvl_index}')
         if not running:
-            if start:
+            if start and lost:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'GAME OVER')
                 print_text(screen, main_font, WIDTH // 2 - 150,
                            HEIGHT // 2 + 75, f'SCORE : {score}')
                 print_text(screen, main_font, WIDTH // 2 - 100,
-                           HEIGHT // 2 + 110, f'LVL : ')
+                           HEIGHT // 2 + 110, f'LVL : {lvl_index}')
         if not running:
             print_text(screen, main_font, WIDTH // 2 - 250,
-                       HEIGHT // 2 + 150, "Press 'Enter' to start")
+                       HEIGHT // 2 + 150, f"Press 'Enter' to {('start', 'continue')[lvl_index]}")
         pygame.display.update()
         game_time.tick(speed)
 
