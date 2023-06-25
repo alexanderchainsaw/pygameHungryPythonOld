@@ -14,8 +14,8 @@ SQUARES_X = (WIDTH//SQUARE_SIZE) - 1  # = 24
 SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
-speed = 10  # difficulty (higher = faster)
-LEVELS = (levels.zero, levels.one, levels.two, levels.three)
+speed = 8  # difficulty (higher = faster)
+LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
 
 
 def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
@@ -25,9 +25,9 @@ def print_text(screen, font, x, y, text, font_color=(255, 255, 255)):
 
 def init_snake():
     snake = deque()
-    snake.append((3, 6))
-    snake.append((2, 6))
-    snake.append((1, 6))
+    snake.append((3, 7))
+    snake.append((2, 7))
+    snake.append((1, 7))
     return snake
 
 
@@ -47,16 +47,17 @@ def main():
     head_position = assets.HEAD_RIGHT
     main_font = pygame.font.Font('Assets/AtariClassic-gry3.ttf', 24)
     snake = init_snake()
-    lvl_index = 0
-    obstacles = LEVELS[lvl_index]
+    lvl = 0
+    obstacles = LEVELS[lvl]
     food = create_food(snake, obstacles)
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
-    running, start, lost = False, False, True
+    running, start, won = False, False, False
+    lost = True
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
     while True:
-        obstacles = LEVELS[lvl_index]
+        obstacles = LEVELS[lvl]
         screen.blit(assets.BACKGROUND, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,14 +66,20 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
                 if event.key == pygame.K_RETURN and not running:
-                    if lost:
+                    if won:
+                        flag, start, running = True, True, True
+                        snake = init_snake()
+                        food = create_food(snake, obstacles)
+                        pos = (1, 0)
+                        head_position = assets.HEAD_RIGHT
+                    elif lost:
                         flag, start, running = True, True, True
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
                         head_position = assets.HEAD_RIGHT
                         score = 0
-                        lvl_index = 0
+                        lvl = 0
                     else:
                         flag, start, running = True, True, True
                         snake = init_snake()
@@ -155,7 +162,10 @@ def main():
                     running = False
                     lost = True
         if score == 100:
-            lvl_index += 1
+            lvl += 1
+            if lvl > len(LEVELS)-1:
+                won = True
+                lvl = 0
             running = False
             lost = False
             score = 0
@@ -174,20 +184,26 @@ def main():
 
         if running:
             print_text(screen, main_font, 0, 0, f'SCORE : {score}')
-            print_text(screen, main_font, 0, 20, f'LVL :{lvl_index}')
+            print_text(screen, main_font, 0, 20, f'LVL :{lvl}')
         if not running:
+            if won:
+                print_text(screen, main_font, WIDTH // 2 - 100,
+                           HEIGHT // 2, 'VICTORY')
             if start and lost:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'GAME OVER')
                 print_text(screen, main_font, WIDTH // 2 - 150,
                            HEIGHT // 2 + 75, f'SCORE : {score}')
                 print_text(screen, main_font, WIDTH // 2 - 100,
-                           HEIGHT // 2 + 110, f'LVL : {lvl_index}')
+                           HEIGHT // 2 + 110, f'LVL : {lvl}')
         if not running:
-            if lvl_index < 1:
-                phrase = 'start'
+            if won:
+                phrase = 'repeat'
             else:
-                phrase = 'continue'
+                if lvl < 1:
+                    phrase = 'start'
+                else:
+                    phrase = 'continue'
             print_text(screen, main_font, WIDTH // 2 - 250,
                        HEIGHT // 2 + 150, f"Press 'Enter' to {phrase}")
         pygame.display.update()
