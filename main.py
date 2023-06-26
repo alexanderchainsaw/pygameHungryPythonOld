@@ -14,7 +14,7 @@ SQUARES_X = (WIDTH//SQUARE_SIZE) - 1  # = 24
 SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
-speed = 8  # difficulty (higher = faster)
+speed = 10  # difficulty (higher = faster)
 LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
 
 
@@ -72,6 +72,7 @@ def main():
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
                         head_position = assets.HEAD_RIGHT
+                        won = False
                     elif lost:
                         flag, start, running = True, True, True
                         snake = init_snake()
