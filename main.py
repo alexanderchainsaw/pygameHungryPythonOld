@@ -15,6 +15,7 @@ SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 speed = 10  # difficulty (higher = faster)
+lvlup_points = 100  # points for level up
 LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
 
 
@@ -52,7 +53,7 @@ def main():
     food = create_food(snake, obstacles)
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
-    running, start, won = False, False, False
+    running, won = False, False
     lost = True
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
@@ -67,14 +68,14 @@ def main():
                     sys.exit()
                 if event.key == pygame.K_RETURN and not running:
                     if won:
-                        flag, start, running = True, True, True
+                        flag, running = True, True
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
                         head_position = assets.HEAD_RIGHT
                         won = False
                     elif lost:
-                        flag, start, running = True, True, True
+                        flag, running = True, True
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
@@ -82,7 +83,7 @@ def main():
                         score = 0
                         lvl = 0
                     else:
-                        flag, start, running = True, True, True
+                        flag, running = True, True
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
@@ -162,7 +163,7 @@ def main():
                 elif next_s in snake or next_s in obstacles:
                     running = False
                     lost = True
-        if score == 100:
+        if score == lvlup_points:
             lvl += 1
             if lvl > len(LEVELS)-1:
                 won = True
@@ -190,7 +191,7 @@ def main():
             if won:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'VICTORY')
-            if start and lost:
+            if lost:
                 print_text(screen, main_font, WIDTH // 2 - 100,
                            HEIGHT // 2, 'GAME OVER')
                 print_text(screen, main_font, WIDTH // 2 - 150,
