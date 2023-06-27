@@ -14,8 +14,7 @@ SQUARES_X = (WIDTH//SQUARE_SIZE) - 1  # = 24
 SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
-speed = 10  # difficulty (higher = faster)
-lvlup_points = 100  # points for level up
+lvlup_points = 500  # points for level up
 LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
 
 
@@ -57,6 +56,7 @@ def main():
     lost = True
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
+    speed = 10  # difficulty (higher = faster)
     while True:
         obstacles = LEVELS[lvl]
         screen.blit(assets.BACKGROUND, (0, 0))
@@ -73,6 +73,7 @@ def main():
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
                         head_position = assets.HEAD_RIGHT
+                        speed += 2
                         won = False
                     elif lost:
                         flag, running = True, True
@@ -82,6 +83,7 @@ def main():
                         head_position = assets.HEAD_RIGHT
                         score = 0
                         lvl = 0
+                        speed = 10
                     else:
                         flag, running = True, True
                         snake = init_snake()
