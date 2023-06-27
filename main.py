@@ -53,7 +53,7 @@ def main():
     rand_food = random.choice(FOOD_FOR_PYTHON)
     pos = (1, 0)
     running, won = False, False
-    lost = True
+    lost = False
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
     speed = 10  # difficulty (higher = faster)
