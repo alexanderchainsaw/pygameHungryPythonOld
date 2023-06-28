@@ -17,6 +17,7 @@ FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
 game_time = pygame.time.Clock()
 lvlup_points = 200  # points for level up
 LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 def init_snake():
@@ -38,7 +39,6 @@ def create_food(snake, obstacle):
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Hungry Python')
     head_position = assets.HEAD_RIGHT
     snake = init_snake()
@@ -184,7 +184,7 @@ def main():
             pygame.draw.rect(screen, (100, 100, 100),
                              (obstacle[0] * SQUARE_SIZE, obstacle[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
-        text_display.display_text(running, won, lost, lvl, score, screen, HEIGHT, WIDTH, streak)
+        text_display.display_text(running, won, lost, lvl, score, streak)
 
         pygame.display.update()
         game_time.tick(speed)
