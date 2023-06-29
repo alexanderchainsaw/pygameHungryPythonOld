@@ -14,10 +14,9 @@ SQUARE_SIZE = 40
 SQUARES_X = (WIDTH//SQUARE_SIZE) - 1  # = 24
 SQUARES_Y = (HEIGHT//SQUARE_SIZE) - 1  # = 17
 FOOD_FOR_PYTHON = assets.FOOD_FOR_PYTHON
-game_time = pygame.time.Clock()
-lvlup_points = 200  # points for level up
+GAME_TIME = pygame.time.Clock()
 LEVELS = (levels.zero, levels.one, levels.two, levels.three, levels.four)
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 def init_snake():
@@ -51,11 +50,12 @@ def main():
     lost = False
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
+    lvlup_points = 200  # points for level up
     speed = 10  # difficulty (higher = faster)
     streak = 0
     while True:
         obstacles = LEVELS[lvl]
-        screen.blit(assets.BACKGROUND, (0, 0))
+        SCREEN.blit(assets.BACKGROUND, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -172,22 +172,22 @@ def main():
             lost = False
             score = 0
         if running:
-            screen.blit(rand_food,
+            SCREEN.blit(rand_food,
                         (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         for s in snake:
-            screen.blit(assets.BODY, (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
-                        SQUARE_SIZE * 2, SQUARE_SIZE * 2))
-        screen.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
-                    SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+            SCREEN.blit(assets.BODY, (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
+                                      SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+        SCREEN.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
+                                    SQUARE_SIZE * 2, SQUARE_SIZE * 2))
 
         for obstacle in obstacles:
-            pygame.draw.rect(screen, (100, 100, 100),
+            pygame.draw.rect(SCREEN, (100, 100, 100),
                              (obstacle[0] * SQUARE_SIZE, obstacle[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
 
         text_display.display_text(running, won, lost, lvl, score, streak)
 
         pygame.display.update()
-        game_time.tick(speed)
+        GAME_TIME.tick(speed)
 
 
 if __name__ == '__main__':

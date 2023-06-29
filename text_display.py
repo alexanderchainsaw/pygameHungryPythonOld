@@ -1,10 +1,10 @@
 import pygame
-from main import screen, WIDTH, HEIGHT
+from main import SCREEN, WIDTH, HEIGHT
 
 
 def print_text(font, x, y, text, font_color=(255, 255, 255)):
     imgtext = font.render(text, True, font_color)
-    screen.blit(imgtext, (x, y))
+    SCREEN.blit(imgtext, (x, y))
 
 
 def display_text(running, won, lost, lvl, score, streak):
