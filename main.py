@@ -51,7 +51,8 @@ def main():
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
     lvlup_points = 200  # points for level up
-    speed = 10  # difficulty (higher = faster)
+    base_speed = 10  # base speed (increases with each win)
+    speed_increment = 2  # adds to the base speed with each consecutive win
     streak = 0
     while True:
         obstacles = LEVELS[lvl]
@@ -69,7 +70,7 @@ def main():
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
                         head_position = assets.HEAD_RIGHT
-                        speed += 2
+                        base_speed += speed_increment
                         streak += 1
                         won = False
                     elif lost:
@@ -80,7 +81,7 @@ def main():
                         head_position = assets.HEAD_RIGHT
                         score = 0
                         lvl = 0
-                        speed = 10
+                        base_speed = 10
                         streak = 0
                     else:
                         flag, running = True, True
@@ -187,7 +188,7 @@ def main():
         text_display.display_text(running, won, lost, lvl, score, streak)
 
         pygame.display.update()
-        GAME_TIME.tick(speed)
+        GAME_TIME.tick(base_speed)
 
 
 if __name__ == '__main__':
