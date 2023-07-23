@@ -39,7 +39,8 @@ def create_food(snake, obstacle):
 def main():
     pygame.init()
     pygame.display.set_caption('Hungry Python')
-    head_position = assets.HEAD_RIGHT
+    visual_status = random.getrandbits(1)  # for switching color schemes during the game
+    head_position = (assets.HEAD_RIGHT, assets.HEAD_RIGHT_Alt)[visual_status]
     snake = init_snake()
     lvl = 0
     obstacles = LEVELS[lvl]
@@ -50,13 +51,13 @@ def main():
     lost = False
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
-    lvlup_points = 200  # points for level up
+    lvlup_points = 10  # points for level up
     base_speed = 10  # base speed (increases with each win)
     speed_increment = 2  # adds to the base speed with each consecutive win
     streak = 0
     while True:
         obstacles = LEVELS[lvl]
-        SCREEN.blit(assets.BACKGROUND, (0, 0))
+        SCREEN.blit((assets.BACKGROUND, assets.BACKGROUND_Alt)[visual_status], (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -69,7 +70,7 @@ def main():
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
-                        head_position = assets.HEAD_RIGHT
+                        head_position = (assets.HEAD_RIGHT, assets.HEAD_RIGHT_Alt)[visual_status]
                         base_speed += speed_increment
                         streak += 1
                         won = False
@@ -78,7 +79,7 @@ def main():
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
-                        head_position = assets.HEAD_RIGHT
+                        head_position = (assets.HEAD_RIGHT, assets.HEAD_RIGHT_Alt)[visual_status]
                         score = 0
                         lvl = 0
                         base_speed = 10
@@ -88,27 +89,27 @@ def main():
                         snake = init_snake()
                         food = create_food(snake, obstacles)
                         pos = (1, 0)
-                        head_position = assets.HEAD_RIGHT
+                        head_position = (assets.HEAD_RIGHT, assets.HEAD_RIGHT_Alt)[visual_status]
                 elif event.key in (pygame.K_w, pygame.K_UP):
                     if flag and not pos[1]:
                         pos = (0, -1)
                         flag = False
-                        head_position = assets.HEAD_UP
+                        head_position = (assets.HEAD_UP, assets.HEAD_UP_Alt)[visual_status]
                 elif event.key in (pygame.K_s, pygame.K_DOWN):
                     if flag and not pos[1]:
                         pos = (0, 1)
                         flag = False
-                        head_position = assets.HEAD_DOWN
+                        head_position = (assets.HEAD_DOWN, assets.HEAD_DOWN_Alt)[visual_status]
                 elif event.key in (pygame.K_a, pygame.K_LEFT):
                     if flag and not pos[0]:
                         pos = (-1, 0)
                         flag = False
-                        head_position = assets.HEAD_LEFT
+                        head_position = (assets.HEAD_LEFT, assets.HEAD_LEFT_Alt)[visual_status]
                 elif event.key in (pygame.K_d, pygame.K_RIGHT):
                     if flag and not pos[0]:
                         pos = (1, 0)
                         flag = False
-                        head_position = assets.HEAD_RIGHT
+                        head_position = (assets.HEAD_RIGHT, assets.HEAD_RIGHT_Alt)[visual_status]
         if running:
             flag = True
             next_s = (snake[0][0] + pos[0], snake[0][1] + pos[1])
@@ -172,12 +173,13 @@ def main():
             running = False
             lost = False
             score = 0
+            visual_status = int(not visual_status)
         if running:
             SCREEN.blit(rand_food,
                         (food[0] * SQUARE_SIZE, food[1] * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
         for s in snake:
-            SCREEN.blit(assets.BODY, (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
-                                      SQUARE_SIZE * 2, SQUARE_SIZE * 2))
+            SCREEN.blit((assets.BODY, assets.BODY_Alt)[visual_status], (s[0] * SQUARE_SIZE, s[1] * SQUARE_SIZE,
+                                                                        SQUARE_SIZE * 2, SQUARE_SIZE * 2))
         SCREEN.blit(head_position, (snake[0][0] * SQUARE_SIZE, snake[0][1] * SQUARE_SIZE,
                                     SQUARE_SIZE * 2, SQUARE_SIZE * 2))
 
