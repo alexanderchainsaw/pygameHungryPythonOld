@@ -51,7 +51,7 @@ def main():
     lost = False
     score = 0
     flag = True  # preventing a bug ( simultaneous key presses causing game over )
-    lvlup_points = 10  # points for level up
+    lvlup_points = 100  # points for level up
     base_speed = 10  # base speed (increases with each win)
     speed_increment = 2  # adds to the base speed with each consecutive win
     streak = 0
