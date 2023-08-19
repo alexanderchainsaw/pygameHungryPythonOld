@@ -12,8 +12,9 @@ Hungry Python is a classic snake game implemented in Python using the Pygame lib
 ## Installation
 
 1. Clone the repository:
-   
-```git clone https://github.com/alexanderchainsaw/pygameHungryPython.git```
+```
+git clone https://github.com/alexanderchainsaw/pygameHungryPython.git
+```
 
 3. Install the required dependencies:
 ```
