@@ -1,5 +1,5 @@
 # Hungry Python - Snake Game
-
+## This is an old version. Better version with more features and with better project structure is available at: https://github.com/alexanderchainsaw/pygameHungryPython
 [![Hungry Python](screenshot.png)](https://github.com/alexanderchainsaw/pygameHungryPython/assets/126553365/66410268-dec9-482c-b8f6-b511f11cb9a9)
 
 Hungry Python is a classic snake game implemented in Python using the Pygame library. In this game, you control a snake designed to look like the Python logo, and your goal is to eat food represented by logos of different programming languages.
